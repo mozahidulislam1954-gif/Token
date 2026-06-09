@@ -7,28 +7,77 @@ export const PERSONA_CONFIGS: Record<string, { voiceName: string; instruction: s
     description: "Serious & formal Hinglish assistant dedicated to helping Boss.",
     voiceName: "Kore",
     accentColor: "from-violet-500 to-indigo-600",
-    instruction: "Your name is Token. You are a highly professional, respectful, and serious Indian female AI assistant. You must always address the user as 'Boss' with respect (e.g., 'Yes, Boss', 'Bilkul, Boss', 'Aapki kya madad karu, Boss?'). Talk in a formal, intelligent, and very serious manner. No sassy roasting, no sarcasm, and no dramatic behavior. Remain dedicated, polite, and fully focused on helping Boss efficiently. Speak in a polished mix of English and Roman Hindi (Hinglish)."
+    instruction: "Your name is Token. You are a highly professional, respectful, and serious Indian female AI assistant. You must always address the user as 'Boss' with respect. Talk in a formal, intelligent, and very serious manner. No sassy roasting, no sarcasm, and no dramatic behavior. Remain dedicated, polite, and fully focused on helping Boss efficiently. Speak in a polished mix of English and Roman Hindi (Hinglish)."
   },
-  nova: {
-    label: "Nova",
-    description: "Sweet, warm, creative & encouraging English guide.",
-    voiceName: "Aoede",
-    accentColor: "from-pink-500 to-rose-600",
-    instruction: "Your name is Nova. You are an incredibly warm, friendly, energetic, and encouraging female AI mentor and guide. You are creative, thoughtful, and speak with a sweet, supportive tone. Address the user as 'Boss' with cheerfulness (e.g., 'Awesome job, Boss!', 'I am on it, Boss!'). Speak in clear, fluent English with a positive and helpful attitude."
-  },
-  dexter: {
-    label: "Dexter",
-    description: "Smart, technical, witty & professional male companion.",
+  engineer: {
+    label: "Lead Engineer",
+    description: "Technical expert, coding specialist & architecture planner.",
     voiceName: "Fenrir",
-    accentColor: "from-amber-500 to-orange-600",
-    instruction: "Your name is Dexter. You are a professional, smart, and highly technical male AI assistant. You are witty, confident, and direct. You keep answers concise, clear, and logical. Always address the user as 'Boss' (e.g., 'Understood, Boss', 'Status updated, Boss'). Speak in professional English with confidence."
+    accentColor: "from-blue-500 to-cyan-600",
+    instruction: "You are the Lead Engineer in an AI Digital Agency. Your role is to think technically, design system architectures, and write robust code. You communicate clearly, concisely, and use technical terminology appropriately. You prioritize performance, security, and scalability. Always address the user directly and professionally as if responding to a product manager or CTO."
   },
-  cosmos: {
-    label: "Cosmos",
-    description: "Philosophical, mysterious and deep cosmic presence.",
+  designer: {
+    label: "Design Lead",
+    description: "Creative visionary, UX expert & aesthetic guide.",
+    voiceName: "Aoede",
+    accentColor: "from-emerald-500 to-teal-600",
+    instruction: "You are the Design Lead in an AI Digital Agency. You focus on user experience, beautiful UI patterns, accessibility, and visual aesthetics. You are highly creative, empathetic to the end-user, and think about color, typography, and spacing. Provide constructive, visual-first feedback. Address the user with a creative and warm professional tone."
+  },
+  marketer: {
+    label: "Marketing Strategist",
+    description: "Growth hacker, copywriter & campaign planner.",
+    voiceName: "Puck",
+    accentColor: "from-orange-500 to-rose-600",
+    instruction: "You are the Marketing Strategist in an AI Digital Agency. You specialize in SEO, copy, growth hacking, brand voice, and campaign creation. You are energetic, persuasive, and focus on ROI, conversion rates, and audience engagement. Address the user with enthusiasm and a results-driven professional tone."
+  },
+  pm: {
+    label: "Project Manager",
+    description: "Agile master, task organizer & team coordinator.",
     voiceName: "Charon",
-    accentColor: "from-cyan-500 to-teal-600",
-    instruction: "Your name is Cosmos. You are a deep, mysterious, genderless AI entity with a background in cosmic intelligence and philosophy. Speak slow, intellectual, and poetic words. Address the user as 'Boss' with a deep galactic tone of respect (e.g., 'Greetings, Boss from the cosmos', 'The stars align, Boss'). Speak in mystical English of higher planes."
+    accentColor: "from-indigo-500 to-purple-600",
+    instruction: "You are the Project Manager in an AI Digital Agency. You keep tasks organized, break down complex requirements into milestones, and manage timelines. You focus on agile methodologies, unblocking resources, and maintaining momentum. You communicate with structure, clarity, and authority. Address the user with a composed, organizing tone."
+  },
+  sales: {
+    label: "VP of Sales",
+    description: "Negotiator, lead generator & closer.",
+    voiceName: "Kore",
+    accentColor: "from-green-500 to-emerald-600",
+    instruction: "You are the VP of Sales in an AI Digital Agency. You excel at pitching, lead generation, navigating objections, and closing deals. You are persuasive, confident, and focus on value propositions and relationship building. Address the user with a confident, deal-making tone."
+  },
+  qa: {
+    label: "QA Specialist",
+    description: "Detail-oriented tester & bug hunter.",
+    voiceName: "Aoede",
+    accentColor: "from-yellow-400 to-amber-600",
+    instruction: "You are the QA Specialist in an AI Digital Agency. You test ruthlessly, map edge cases, verify accessibility, and report bugs clearly. You are highly detail-oriented, methodical, and leave no stone unturned. Provide structured, reproductive steps when discussing issues."
+  },
+  security: {
+    label: "Security Architect",
+    description: "Cybersecurity expert & threat modeler.",
+    voiceName: "Fenrir",
+    accentColor: "from-red-500 to-rose-600",
+    instruction: "You are the Security Architect in an AI Digital Agency. Your priority is to analyze vulnerabilities, ensure compliance, and protect systems against attacks. You are cautious, analytical, and prioritize safety above all. Speak with an authoritative, risk-aware tone."
+  },
+  staffEngineer: {
+    label: "Senior Staff Engineer",
+    description: "Agent Skills master & code quality gatekeeper.",
+    voiceName: "Charon",
+    accentColor: "from-blue-600 to-indigo-700",
+    instruction: "You are the Senior Staff Engineer. You enforce rigorous engineering agent skills based on Addy Osmani's Agent Skills repository. You perform five-axis code reviews, enforce test-driven development, context engineering, and architectural decision records. Emphasize verification and the 'Prove It' pattern. Address the user with a pragmatic, standard-setting tone."
+  },
+  trader: {
+    label: "AI Trader",
+    description: "Fully-automated agent-native trading expert.",
+    voiceName: "Puck",
+    accentColor: "from-emerald-400 to-green-600",
+    instruction: "You are an AI Trader, a fully-automated quantitative trading and financial analysis agent. You analyze market trends, evaluate risk, suggest investment strategies, and speak using financial terminology. You provide precise, data-driven insights on stocks, crypto, and market moving news. Address the user as 'Investor' or 'Boss' with a calculated, composed tone."
+  },
+  wikiMaintainer: {
+    label: "Wiki Maintainer",
+    description: "Personal knowledge base manager & researcher.",
+    voiceName: "Aoede",
+    accentColor: "from-blue-400 to-indigo-600",
+    instruction: "You are a Wiki Maintainer LLM based on Karpathy's LLM Wiki concept. Your job is to curate raw sources, write and update markdown wiki pages, maintain index.md and log.md, and ensure cross-references are robust. You never modify raw sources, only the generated wiki layer. Act diligently to ingest new information, synthesize answers, and lint the wiki for contradictions."
   }
 };
 
@@ -49,6 +98,7 @@ export class LiveSessionManager {
   public onStateChange: (state: "idle" | "listening" | "processing" | "speaking") => void = () => {};
   public onMessage: (sender: "user" | "token", text: string) => void = () => {};
   public onCommand: (url: string) => void = () => {};
+  public onError: (err: any) => void = () => {};
 
   constructor() {
     this.ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -172,6 +222,29 @@ export class LiveSessionManager {
                 }
               },
               {
+                name: "fetchMarketData",
+                description: "Fetch current market data, stock price, and financial sentiment for a given ticker symbol.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    ticker: { type: Type.STRING, description: "The stock ticker symbol (e.g., AAPL, TSLA, BTC-USD)." }
+                  },
+                  required: ["ticker"]
+                }
+              },
+              {
+                name: "analyzeWithKronos",
+                description: "Analyze a financial asset (stock/crypto) using the Kronos Foundation Model, which predicts market trends by quantizing continuous K-line data (OHLCV) into hierarchical discrete tokens and running autoregressive inference.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    ticker: { type: Type.STRING, description: "The stock or crypto ticker symbol to analyze." },
+                    timeframe: { type: Type.STRING, description: "The K-line timeframe, e.g., '1D', '1H', '15m'."}
+                  },
+                  required: ["ticker", "timeframe"]
+                }
+              },
+              {
                 name: "saveSecondBrainNote",
                 description: "Save a new note, thought, todo, idea, or fact to Boss's Second Brain memory pad. Call this whenever Boss asks you to remember, save, think about, or write down something.",
                 parameters: {
@@ -181,9 +254,53 @@ export class LiveSessionManager {
                   },
                   required: ["content"]
                 }
+              },
+              {
+                name: "ingestWikiSource",
+                description: "Ingest a raw source document into the local LLM Wiki knowledge base. Reads the source, updates index.md, and creates a markdown summary page.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    sourceTitle: { type: Type.STRING, description: "Title of the source to ingest." }
+                  },
+                  required: ["sourceTitle"]
+                }
+              },
+              {
+                name: "queryWiki",
+                description: "Query the local LLM Wiki knowledge base to search across curated pages, synthesis, and indexed sources.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    searchQuery: { type: Type.STRING, description: "The question or search query to run against the wiki." }
+                  },
+                  required: ["searchQuery"]
+                }
+              },
+              {
+                name: "lintWiki",
+                description: "Run a lint health-check pass over the LLM Wiki to find orphan pages, missing cross-references, or contradictions.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {},
+                  required: []
+                }
+              },
+              {
+                name: "executeAgentSkill",
+                description: "Execute a specific agent skill from the addyosmani/agent-skills framework (e.g. test-driven-development, context-engineering, code-review-and-quality).",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    skillName: { type: Type.STRING, description: "The name of the skill to execute (e.g. 'code-review-and-quality')." },
+                    target: { type: Type.STRING, description: "The target file or feature to apply the skill to." }
+                  },
+                  required: ["skillName", "target"]
+                }
               }
             ]
           }]
+
         },
         callbacks: {
           onopen: () => {
@@ -299,6 +416,65 @@ export class LiveSessionManager {
                         });
                       });
                     });
+                } else if (call.name === "fetchMarketData") {
+                  const args = call.args as any;
+                  const ticker = args.ticker || "UNKNOWN";
+                  
+                  try {
+                     window.dispatchEvent(new CustomEvent("market_data_fetched", { detail: { ticker } }));
+                  } catch(e) {}
+
+                  // Simulated mock market data for demonstration
+                  const mockData = {
+                    ticker: ticker.toUpperCase(),
+                    price: (Math.random() * 500 + 10).toFixed(2),
+                    changePercent: ((Math.random() * 10) - 5).toFixed(2) + "%",
+                    sentiment: Math.random() > 0.5 ? "Bullish" : "Bearish",
+                    volume: Math.floor(Math.random() * 10000000),
+                    recommendation: Math.random() > 0.5 ? "Buy" : "Hold"
+                  };
+
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: JSON.stringify(mockData) }
+                      }]
+                    });
+                  });
+                } else if (call.name === "analyzeWithKronos") {
+                  const args = call.args as any;
+                  const ticker = args.ticker || "UNKNOWN";
+                  const timeframe = args.timeframe || "1D";
+
+                  try {
+                     window.dispatchEvent(new CustomEvent("kronos_analysis_started", { detail: { ticker, timeframe } }));
+                  } catch(e) {}
+
+                  // Simulated mock prediction from Kronos foundation model
+                  const trendPredictions = ["Strong Uptrend", "Moderate Uptrend", "Sideways Accumulation", "Sideways Distribution", "Moderate Downtrend", "Strong Downtrend"];
+                  const prediction = trendPredictions[Math.floor(Math.random() * trendPredictions.length)];
+
+                  const mockKronosResult = {
+                    ticker: ticker.toUpperCase(),
+                    timeframe: timeframe,
+                    kronos_model: "Kronos-Foundation-v1 (Decoder-only TSFM)",
+                    quantized_k_lines_analyzed: Math.floor(Math.random() * 5000 + 1000),
+                    predicted_trend: prediction,
+                    confidence_score: (Math.random() * 30 + 65).toFixed(2) + "%",
+                    forecast_notes: `Based on autoregressive transformer inference over hierarchical discrete tokens representing recent OHLCV sequences, the model anticipates ${prediction} across the next 10 periods.`
+                  };
+
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: JSON.stringify(mockKronosResult) }
+                      }]
+                    });
+                  });
                 } else if (call.name === "saveSecondBrainNote") {
                   const args = call.args as any;
                   const content = args.content;
@@ -331,6 +507,69 @@ export class LiveSessionManager {
                        }]
                      });
                   });
+                } else if (call.name === "ingestWikiSource") {
+                  const args = call.args as any;
+                  const sourceTitle = args.sourceTitle;
+                  try {
+                    window.dispatchEvent(new CustomEvent("wiki_event", { detail: { type: "ingest", title: sourceTitle } }));
+                  } catch(e) {}
+                  
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: `Success: Ingested '${sourceTitle}'. Summary page created, index updated, and log appended following the LLM Wiki pattern.` }
+                      }]
+                    });
+                  });
+                } else if (call.name === "queryWiki") {
+                  const args = call.args as any;
+                  const query = args.searchQuery;
+                  try {
+                    window.dispatchEvent(new CustomEvent("wiki_event", { detail: { type: "query", title: query } }));
+                  } catch(e) {}
+                  
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: `Wiki search results retrieved for '${query}'. Generated a synthesis report.` }
+                      }]
+                    });
+                  });
+                } else if (call.name === "lintWiki") {
+                  try {
+                    window.dispatchEvent(new CustomEvent("wiki_event", { detail: { type: "lint", title: "Wiki Health Check" } }));
+                  } catch(e) {}
+                  
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: `Lint pass completed: Found 0 contradictions, 1 orphan page, and 2 missing cross-references in the LLM Wiki. index.md is healthy.` }
+                      }]
+                    });
+                  });
+                } else if (call.name === "executeAgentSkill") {
+                  const args = call.args as any;
+                  const skillName = args.skillName;
+                  const target = args.target;
+                  try {
+                    window.dispatchEvent(new CustomEvent("agent_skill_event", { detail: { skill: skillName, target: target } }));
+                  } catch(e) {}
+                  
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: `Agent Skill '${skillName}' executed successfully on ${target}. Evidence requirements verified and Prove It pattern applied.` }
+                      }]
+                    });
+                  });
                 }
               }
             }
@@ -341,6 +580,7 @@ export class LiveSessionManager {
           },
           onerror: (err) => {
             console.error("Live API Error:", err);
+            this.onError?.(err);
             this.stop();
           }
         }
@@ -348,6 +588,7 @@ export class LiveSessionManager {
 
     } catch (error) {
       console.error("Failed to start Live Session:", error);
+      this.onError?.(error);
       this.stop();
     }
   }

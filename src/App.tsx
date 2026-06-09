@@ -115,11 +115,60 @@ export default function App() {
       }]);
     }) as EventListener;
     
+    const handleMarketData = ((e: CustomEvent) => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        sender: "system",
+        text: `Fetching market data for: ${e.detail.ticker}`,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    }) as EventListener;
+
+    const handleKronosAnalysis = ((e: CustomEvent) => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        sender: "system",
+        text: `Initializing Kronos TSFM analysis for: ${e.detail.ticker} (${e.detail.timeframe})`,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    }) as EventListener;
+
+    const handleWikiEvent = ((e: CustomEvent) => {
+      let text = "";
+      if (e.detail.type === "ingest") text = `Wiki Maintainer: Ingesting source '${e.detail.title}'`;
+      else if (e.detail.type === "query") text = `Wiki Maintainer: Querying index for '${e.detail.title}'`;
+      else if (e.detail.type === "lint") text = `Wiki Maintainer: Running health-check lint pass...`;
+      
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        sender: "system",
+        text: text,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    }) as EventListener;
+
+    const handleAgentSkillEvent = ((e: CustomEvent) => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        sender: "system",
+        text: `Staff Engineer: Executing Agent Skill '${e.detail.skill}' on ${e.detail.target}...`,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    }) as EventListener;
+    
     window.addEventListener("brain_note_added", handleBrainUpdate as EventListener);
     window.addEventListener("web_scrape_initiated", handleScrape);
+    window.addEventListener("market_data_fetched", handleMarketData);
+    window.addEventListener("kronos_analysis_started", handleKronosAnalysis);
+    window.addEventListener("wiki_event", handleWikiEvent);
+    window.addEventListener("agent_skill_event", handleAgentSkillEvent);
     return () => {
       window.removeEventListener("brain_note_added", handleBrainUpdate as EventListener);
       window.removeEventListener("web_scrape_initiated", handleScrape);
+      window.removeEventListener("market_data_fetched", handleMarketData);
+      window.removeEventListener("kronos_analysis_started", handleKronosAnalysis);
+      window.removeEventListener("wiki_event", handleWikiEvent);
+      window.removeEventListener("agent_skill_event", handleAgentSkillEvent);
     };
   }, []);
 
@@ -197,6 +246,10 @@ export default function App() {
         };
       }
     } catch (err: any) {
+      if (err?.message?.includes("Permission denied") || err?.name === 'NotAllowedError') {
+        // User cancelled or permission denied
+        return;
+      }
       console.error("Error starting screen share", err);
       alert(
         "Boss, the browser is blocking screen sharing inside the preview window because of iframe security rules.\n\n" +
@@ -243,6 +296,10 @@ export default function App() {
         };
       }
     } catch (err: any) {
+      if (err?.message?.includes("Permission denied") || err?.name === 'NotAllowedError') {
+        // User cancelled or permission denied
+        return;
+      }
       console.error("Error starting camera share", err);
       alert(
         "Boss, please ensure you allow video/camera permissions in your browser. If you are inside the preview iframe, or blocked, please open the app in a new tab."
@@ -497,6 +554,13 @@ export default function App() {
           setTimeout(() => {
             window.open(url, "_blank");
           }, 1000);
+        };
+
+        session.onError = (err) => {
+          console.error("Live API Session Error:", err);
+          alert("The Live Session API is currently unavailable or experienced an error. Please try again later.");
+          setIsSessionActive(false);
+          setAppState("idle");
         };
 
         await session.start();
