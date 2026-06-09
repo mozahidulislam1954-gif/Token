@@ -1,0 +1,9 @@
+{
+  "name": "Remix: Token - AI Voice Assistant",
+  "description": "A sassy, witty, and intelligent Indian female AI voice assistant named Token.",
+  "requestFramePermissions": [
+    "microphone",
+    "display-capture",
+    "camera"
+  ]
+}
