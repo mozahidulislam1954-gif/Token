@@ -1,12 +1,15 @@
 import { motion } from "motion/react";
+import { useMemo } from "react";
+import { PERSONA_CONFIGS } from "../services/liveService";
 
 type VisualizerState = "idle" | "listening" | "processing" | "speaking";
 
 interface VisualizerProps {
   state: VisualizerState;
+  activePersona: string;
 }
 
-export default function Visualizer({ state }: VisualizerProps) {
+export default function Visualizer({ state, activePersona }: VisualizerProps) {
   const getRingAnimation = (index: number, reverse: boolean = false) => {
     const baseSpeed = state === "listening" ? 3 : state === "processing" ? 1.5 : state === "speaking" ? 2 : 15;
     return {
@@ -122,10 +125,10 @@ export default function Visualizer({ state }: VisualizerProps) {
         style={{ boxShadow: `0 0 45px ${theme.color}, inset 0 0 35px ${theme.color}` }}
       >
         <div 
-          className="font-bold tracking-[0.3em] text-xl text-white select-none"
-          style={{ textShadow: `0 0 15px ${theme.color}, 0 0 30px ${theme.color}` }}
+          className="font-bold tracking-[0.3em] text-xl text-white select-none whitespace-nowrap text-center text-ellipsis max-w-full overflow-hidden px-2"
+          style={{ textShadow: `0 0 15px ${theme.color}, 0 0 30px ${theme.color}`, fontSize: 'clamp(10px, 1.2rem, 16px)' }}
         >
-          TOKEN
+          {PERSONA_CONFIGS[activePersona]?.label?.toUpperCase() || 'TOKEN'}
         </div>
         
         {/* Under-center status mini text */}

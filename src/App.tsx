@@ -717,7 +717,7 @@ export default function App() {
 
         {/* Center Visualizer (Fixed Full Screen Background) */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-          <Visualizer state={appState} />
+          <Visualizer state={appState} activePersona={activePersona} />
         </div>
 
         {/* Right Column: User Status */}

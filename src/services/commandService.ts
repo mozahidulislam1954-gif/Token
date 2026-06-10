@@ -141,6 +141,20 @@ export function processCommand(command: string): {
       sassy: "Opening Google Calendar. Let me witness your empty schedule or those meetings you wish were emails! 📅 Schedule check karlo."
     },
     {
+      name: "notepad",
+      keys: ["notepad", "text editor", "notes editor"],
+      hindiKeys: ["notepad kholo", "notepad chalao", "notepad open"],
+      webUrl: "notepad://",
+      sassy: "Opening Notepad! Writing your new manifesto or just some random passwords securely? 📝"
+    },
+    {
+      name: "vscode",
+      keys: ["vscode", "vs code", "visual studio code"],
+      hindiKeys: ["vscode kholo", "vs code chalao", "vscode open"],
+      webUrl: "vscode://",
+      sassy: "Opening VS Code. Time to type some bugs! I mean, features. 💻"
+    },
+    {
       name: "slack",
       keys: ["slack", "office chat"],
       hindiKeys: ["slack kholo", "slack chalao", "slack open"],

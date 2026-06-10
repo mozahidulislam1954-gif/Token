@@ -32,7 +32,7 @@ export function setupTelegramBot() {
 
     bot.onText(/\/start/, (msg) => {
       const chatId = msg.chat.id;
-      bot?.sendMessage(chatId, "Namaste, Boss. Main Token hoon, aapki AI Assistant. Aapki kya madad karu?\n(Type /godmode to switch to G0DM0D3 Hacker mode, /token to switch back)");
+      bot?.sendMessage(chatId, "Namaste, Boss. Main Token hoon, aapki AI Assistant. Aapki kya madad karu?\n(Type /godmode to switch to G0DM0D3 Hacker mode, /token to switch back to normal)");
     });
 
     bot.onText(/\/godmode/, (msg) => {

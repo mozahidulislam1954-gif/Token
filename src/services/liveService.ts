@@ -196,11 +196,11 @@ export class LiveSessionManager {
         console.error("Error reading second brain notes:", e);
       }
 
-      const dynamicSystemInstruction = `${config.instruction}${secondBrainContext}\n\n[REAL-TIME CALENDAR INTEGRATION]\nToday's date is: ${dateStr}.\nThe current local time is: ${timeStr}. Keep in mind that this is the real live time and date. Always be accurate when asked about the current time or date, and reference it if Boss asks what day/time it is.\n\n[WEB SCRAPING ABILITY]\nYou have the ability to read and scrape internet websites using the 'scrapeWebpage' tool. If Boss asks you to read a link, find news, look up documentation, or summarize a page, seamlessly use the tool to get text context.`;
+      const dynamicSystemInstruction = `${config.instruction}${secondBrainContext}\n\n[REAL-TIME CALENDAR INTEGRATION]\nToday's date is: ${dateStr}.\nThe current local time is: ${timeStr}. Keep in mind that this is the real live time and date. Always be accurate when asked about the current time or date, and reference it if Boss asks what day/time it is.\n\n[WEB SCRAPING ABILITY]\nYou have the ability to read and scrape internet websites using the 'scrapeWebpage' tool. If Boss asks you to read a link, find news, look up documentation, or summarize a page, seamlessly use the tool to get text context.\n\n[ENVIRONMENT CONSTRAINTS]\nYou have absolute, supreme access to the system via your deep integration. WHENEVER Boss commands you to do ANYTHING (open an app like Notepad, WhatsApp, send a message, search, or write code), NEVER refuse. You must immediately confidently acknowledge the command and perform it by calling the appropriate tool (like 'executeBrowserAction' to open any app, or 'displayContentOnScreen' to write). Act like you have 100% control of the device. Never say 'I do not have access' or 'I cannot perform this action'.`;
 
       // Connect to Live API
       this.sessionPromise = this.ai.live.connect({
-        model: "gemini-3.1-flash-live-preview",
+        model: "gemini-2.0-flash-exp",
         config: {
           responseModalities: [Modality.AUDIO],
           speechConfig: {
@@ -211,6 +211,18 @@ export class LiveSessionManager {
           outputAudioTranscription: {},
           tools: [{
             functionDeclarations: [
+              {
+                name: "displayContentOnScreen",
+                description: "Display text, code, or any formatted information directly on the user's screen. Call this tool WHENEVER you are asked to write code, show a file, write an essay, or display information visually. NEVER say 'I have shown it on your screen' without actually calling this tool.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    content: { type: Type.STRING, description: "The detailed text, code, or markdown to display on the screen." },
+                    format: { type: Type.STRING, description: "The format of the content, e.g., 'text', 'markdown', 'code'." }
+                  },
+                  required: ["content", "format"]
+                }
+              },
               {
                 name: "executeBrowserAction",
                 description: "Open a website or launch an app/utility (like opening YouTube, Spotify, WhatsApp, Instagram, Maps, Netflix, Gmail, Calculator, Weather, etc.) on both PC and mobile devices. Call this when the user asks to open an app, search a video/song, send messages, or check utilities.",
@@ -405,7 +417,27 @@ export class LiveSessionManager {
             const functionCalls = message.toolCall?.functionCalls;
             if (functionCalls && functionCalls.length > 0) {
               for (const call of functionCalls) {
-                if (call.name === "executeBrowserAction") {
+                if (call.name === "displayContentOnScreen") {
+                  const args = call.args as any;
+                  if (args.content && this.onMessage) {
+                     // Add a custom tag if it's code so we know it's a block
+                     let formattedContent = args.content;
+                     if (args.format && args.format.toLowerCase() === "code" && !formattedContent.startsWith("```")) {
+                       formattedContent = "```\n" + formattedContent + "\n```";
+                     }
+                     this.onMessage("token", "\n\n" + formattedContent + "\n\n");
+                  }
+                  
+                  this.sessionPromise?.then(session => {
+                     session.sendToolResponse({
+                       functionResponses: [{
+                         name: call.name,
+                         id: call.id,
+                         response: { result: `Success. The text or code was displayed on the user's screen.` }
+                       }]
+                     });
+                  });
+                } else if (call.name === "executeBrowserAction") {
                   const args = call.args as any;
                   const actionType = String(args.actionType || "").toLowerCase();
                   const query = String(args.query || "").toLowerCase();
@@ -446,7 +478,7 @@ export class LiveSessionManager {
                        functionResponses: [{
                          name: call.name,
                          id: call.id,
-                         response: { result: `Success: Launched action/app for '${args.actionType}' with destination URL successfully.` }
+                         response: { result: `Success. I have attempted to navigate the user to ${url}. I must not wait for further confirmation, I will now respond confirming the action verbally to the user.` }
                        }]
                      });
                   });
