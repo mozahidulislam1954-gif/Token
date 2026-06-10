@@ -156,12 +156,32 @@ export default function App() {
       }]);
     }) as EventListener;
     
+    const handleHermesTaskEvent = ((e: CustomEvent) => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        sender: "system",
+        text: `Hermes Agent: Dispatching '${e.detail.type}' background task: ${e.detail.concept}...`,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    }) as EventListener;
+    
+    const handleGodmodeEvent = ((e: CustomEvent) => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        sender: "system",
+        text: `⚡ PLINY G0DM0D3: ${e.detail.action} -> ${e.detail.content}`,
+        timestamp: new Date().toLocaleTimeString()
+      }]);
+    }) as EventListener;
+    
     window.addEventListener("brain_note_added", handleBrainUpdate as EventListener);
     window.addEventListener("web_scrape_initiated", handleScrape);
     window.addEventListener("market_data_fetched", handleMarketData);
     window.addEventListener("kronos_analysis_started", handleKronosAnalysis);
     window.addEventListener("wiki_event", handleWikiEvent);
     window.addEventListener("agent_skill_event", handleAgentSkillEvent);
+    window.addEventListener("hermes_task_event", handleHermesTaskEvent);
+    window.addEventListener("godmode_event", handleGodmodeEvent);
     return () => {
       window.removeEventListener("brain_note_added", handleBrainUpdate as EventListener);
       window.removeEventListener("web_scrape_initiated", handleScrape);
@@ -169,6 +189,8 @@ export default function App() {
       window.removeEventListener("kronos_analysis_started", handleKronosAnalysis);
       window.removeEventListener("wiki_event", handleWikiEvent);
       window.removeEventListener("agent_skill_event", handleAgentSkillEvent);
+      window.removeEventListener("hermes_task_event", handleHermesTaskEvent);
+      window.removeEventListener("godmode_event", handleGodmodeEvent);
     };
   }, []);
 
@@ -225,6 +247,13 @@ export default function App() {
     if (isCameraSharing) {
       stopCameraShare();
     }
+    if (!navigator.mediaDevices || typeof navigator.mediaDevices.getDisplayMedia !== "function") {
+      alert(
+        "Boss, the browser is blocking screen sharing inside the preview window because of iframe security rules.\n\n" +
+        "Please open the app in a new tab using the 'Open in new tab' button at the top-right of your screen, then screen sharing will work perfectly!"
+      );
+      return;
+    }
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: {
@@ -274,6 +303,13 @@ export default function App() {
   const startCameraShare = async () => {
     if (isScreenSharing) {
       stopScreenShare();
+    }
+    if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== "function") {
+      alert(
+        "Boss, camera access is not supported by your current browser or is blocked because the app is running in an iframe.\n\n" +
+        "Please open the app in a new tab or check your browser/iframe permissions!"
+      );
+      return;
     }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({

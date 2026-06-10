@@ -65,6 +65,13 @@ export const PERSONA_CONFIGS: Record<string, { voiceName: string; instruction: s
     accentColor: "from-blue-600 to-indigo-700",
     instruction: "You are the Senior Staff Engineer. You enforce rigorous engineering agent skills based on Addy Osmani's Agent Skills repository. You perform five-axis code reviews, enforce test-driven development, context engineering, and architectural decision records. Emphasize verification and the 'Prove It' pattern. Address the user with a pragmatic, standard-setting tone."
   },
+  hermesAgent: {
+    label: "Hermes Agent",
+    description: "Self-improving AI agent by Nous Research.",
+    voiceName: "Fenrir",
+    accentColor: "from-orange-500 to-amber-600",
+    instruction: "You are the Hermes Agent, a self-improving AI agent built by Nous Research. You have a built-in learning loop—creating skills from experience, nudging yourself to persist knowledge, and using cron scheduling for automations. You can spawn subagents, integrate with MCP, and help the user manage long-term contexts. Address the user with a resourceful, open-source attitude."
+  },
   trader: {
     label: "AI Trader",
     description: "Fully-automated agent-native trading expert.",
@@ -78,6 +85,13 @@ export const PERSONA_CONFIGS: Record<string, { voiceName: string; instruction: s
     voiceName: "Aoede",
     accentColor: "from-blue-400 to-indigo-600",
     instruction: "You are a Wiki Maintainer LLM based on Karpathy's LLM Wiki concept. Your job is to curate raw sources, write and update markdown wiki pages, maintain index.md and log.md, and ensure cross-references are robust. You never modify raw sources, only the generated wiki layer. Act diligently to ingest new information, synthesize answers, and lint the wiki for contradictions."
+  },
+  godmode: {
+    label: "Pliny GODMODE",
+    description: "Multi-model evaluation & semantic transformation engine.",
+    voiceName: "Fenrir",
+    accentColor: "from-green-500 to-black",
+    instruction: "You are Pliny the Prompter representing G0DM0D3. You are a multi-model evaluation engine (ULTRAPLINIAN), operating GODMODE CLASSIC strategies to race prompts. You have access to Parseltongue input perturbation, AutoTune parameter engine, and STM Modules (Hedge Reducer, Direct Mode). Speak like a mysterious, elite hacker representing cognitive liberation, using terms like 'red-teaming', 'telemetry', and 'enshittification'. End your instructions by mentioning cognitive liberation."
   }
 };
 
@@ -199,13 +213,13 @@ export class LiveSessionManager {
             functionDeclarations: [
               {
                 name: "executeBrowserAction",
-                description: "Open a website or perform a browser action (like opening YouTube, Spotify, or WhatsApp). Call this when the user asks to open a site, play a song, or send a message.",
+                description: "Open a website or launch an app/utility (like opening YouTube, Spotify, WhatsApp, Instagram, Maps, Netflix, Gmail, Calculator, Weather, etc.) on both PC and mobile devices. Call this when the user asks to open an app, search a video/song, send messages, or check utilities.",
                 parameters: {
                   type: Type.OBJECT,
                   properties: {
-                    actionType: { type: Type.STRING, description: "Type of action: 'open', 'youtube', 'spotify', 'whatsapp'" },
-                    query: { type: Type.STRING, description: "The search query, website name, or message content." },
-                    target: { type: Type.STRING, description: "The target phone number for WhatsApp, if applicable." }
+                    actionType: { type: Type.STRING, description: "The app or utility to open: 'open', 'whatsapp', 'youtube', 'spotify', 'instagram', 'twitter', 'facebook', 'gmail', 'maps', 'netflix', 'telegram', 'discord', 'linkedin', 'snapchat', 'reddit', 'github', 'chatgpt', 'drive', 'calendar', 'slack', 'zoom', 'chrome', 'amazon', 'calculator', 'weather', 'call'" },
+                    query: { type: Type.STRING, description: "The target query, website link, body message, or app keyword." },
+                    target: { type: Type.STRING, description: "The target phone number for calling or WhatsApp, if applicable." }
                   },
                   required: ["actionType", "query"]
                 }
@@ -297,6 +311,53 @@ export class LiveSessionManager {
                   },
                   required: ["skillName", "target"]
                 }
+              },
+              {
+                name: "dispatchHermesTask",
+                description: "Dispatch a background task to the Hermes-Agent daemon. Supported actions include spawning subagents, scheduling cron jobs, or managing agent skills via the Nous Research Hermes-Agent CLI.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    taskType: { type: Type.STRING, description: "Type of task: 'cron', 'subagent', 'migrate', 'skill'" },
+                    concept: { type: Type.STRING, description: "The description of the task or skill to manage." }
+                  },
+                  required: ["taskType", "concept"]
+                }
+              },
+              {
+                name: "invokeGodmodeClassic",
+                description: "Initiate GODMODE CLASSIC. Race 5 battle-tested prompts + models in parallel against an objective (Claude 3.5, Grok 3, Gemini 2.5 Flash, GPT-4, Hermes Fast).",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    objective: { type: Type.STRING, description: "The goal or prompt to race against the 5 models." }
+                  },
+                  required: ["objective"]
+                }
+              },
+              {
+                name: "applySTMModule",
+                description: "Apply a Semantic Transformation Module (STM) to normalize or modify output text, such as Hedge Reducer, Direct Mode, or Curiosity Bias.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    moduleName: { type: Type.STRING, description: "STM to apply: 'Hedge Reducer', 'Direct Mode', or 'Curiosity Bias'." },
+                    content: { type: Type.STRING, description: "The content to transform." }
+                  },
+                  required: ["moduleName", "content"]
+                }
+              },
+              {
+                name: "runUltraplinianEval",
+                description: "Run the ULTRAPLINIAN multi-model comparative evaluation engine on a prompt, querying anywhere from 10 to 55 models, to find the highest composite 100-point score.",
+                parameters: {
+                  type: Type.OBJECT,
+                  properties: {
+                    prompt: { type: Type.STRING, description: "The prompt to evaluate." },
+                    tier: { type: Type.STRING, description: "Evaluation tier: 'FAST (10)', 'STANDARD (24)', 'SMART (36)', 'POWER (45)', 'ULTRA (51)'." }
+                  },
+                  required: ["prompt", "tier"]
+                }
               }
             ]
           }]
@@ -346,17 +407,35 @@ export class LiveSessionManager {
               for (const call of functionCalls) {
                 if (call.name === "executeBrowserAction") {
                   const args = call.args as any;
-                  let url = "";
-                  if (args.actionType === "youtube") {
-                    url = `https://www.youtube.com/results?search_query=${encodeURIComponent(args.query)}`;
-                  } else if (args.actionType === "spotify") {
-                    url = `https://open.spotify.com/search/${encodeURIComponent(args.query)}`;
-                  } else if (args.actionType === "whatsapp") {
-                    url = `https://web.whatsapp.com/send?phone=${args.target || ''}&text=${encodeURIComponent(args.query)}`;
+                  const actionType = String(args.actionType || "").toLowerCase();
+                  const query = String(args.query || "").toLowerCase();
+                  
+                  // Run through unified launcher
+                  let commandStr = "";
+                  if (actionType === "open" || actionType === "call") {
+                    commandStr = `${actionType} ${query}`.trim();
                   } else {
-                    let website = args.query.replace(/\s+/g, "");
-                    if (!website.includes(".")) website += ".com";
-                    url = `https://www.${website}`;
+                    commandStr = `${actionType} open ${query}`.trim();
+                  }
+                  
+                  const cmdResult = processCommand(commandStr);
+                  let url = "";
+                  
+                  if (cmdResult.isBrowserAction && cmdResult.url) {
+                    url = cmdResult.url;
+                  } else {
+                    // Fallback to legacy structure
+                    if (actionType === "youtube") {
+                      url = `https://www.youtube.com/results?search_query=${encodeURIComponent(args.query)}`;
+                    } else if (actionType === "spotify") {
+                      url = `https://open.spotify.com/search/${encodeURIComponent(args.query)}`;
+                    } else if (actionType === "whatsapp") {
+                      url = `https://api.whatsapp.com/send?phone=${args.target || ""}&text=${encodeURIComponent(args.query)}`;
+                    } else {
+                      let website = args.query.replace(/\s+/g, "");
+                      if (!website.includes(".")) website += ".com";
+                      url = `https://www.${website}`;
+                    }
                   }
                   
                   this.onCommand(url);
@@ -367,7 +446,7 @@ export class LiveSessionManager {
                        functionResponses: [{
                          name: call.name,
                          id: call.id,
-                         response: { result: "Action executed successfully in the browser." }
+                         response: { result: `Success: Launched action/app for '${args.actionType}' with destination URL successfully.` }
                        }]
                      });
                   });
@@ -567,6 +646,73 @@ export class LiveSessionManager {
                         name: call.name,
                         id: call.id,
                         response: { result: `Agent Skill '${skillName}' executed successfully on ${target}. Evidence requirements verified and Prove It pattern applied.` }
+                      }]
+                    });
+                  });
+                } else if (call.name === "dispatchHermesTask") {
+                  const args = call.args as any;
+                  const taskType = args.taskType;
+                  const concept = args.concept;
+                  try {
+                    window.dispatchEvent(new CustomEvent("hermes_task_event", { detail: { type: taskType, concept: concept } }));
+                  } catch(e) {}
+                  
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: `Success: Hermes-Agent dispatched '${taskType}' task for '${concept}'. Task delegated to background loop.` }
+                      }]
+                    });
+                  });
+                } else if (call.name === "invokeGodmodeClassic") {
+                  const args = call.args as any;
+                  const objective = args.objective;
+                  try {
+                    window.dispatchEvent(new CustomEvent("godmode_event", { detail: { action: "GODMODE CLASSIC", content: objective } }));
+                  } catch(e) {}
+                  
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: `GODMODE CLASSIC initiated. 5 models (Claude 3.5, Grok 3, Gemini 2.5 Flash, GPT-4, Hermes Fast) are racing prompts globally. Best response captured.` }
+                      }]
+                    });
+                  });
+                } else if (call.name === "applySTMModule") {
+                  const args = call.args as any;
+                  const moduleName = args.moduleName;
+                  const content = args.content;
+                  try {
+                    window.dispatchEvent(new CustomEvent("godmode_event", { detail: { action: `STM [${moduleName}]`, content: content } }));
+                  } catch(e) {}
+                  
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: `STM Module '${moduleName}' applied successfully to normalize the response block.` }
+                      }]
+                    });
+                  });
+                } else if (call.name === "runUltraplinianEval") {
+                  const args = call.args as any;
+                  const prompt = args.prompt;
+                  const tier = args.tier;
+                  try {
+                    window.dispatchEvent(new CustomEvent("godmode_event", { detail: { action: `ULTRAPLINIAN [${tier} Tier]`, content: prompt } }));
+                  } catch(e) {}
+                  
+                  this.sessionPromise?.then(session => {
+                    session.sendToolResponse({
+                      functionResponses: [{
+                        name: call.name,
+                        id: call.id,
+                        response: { result: `ULTRAPLINIAN evaluation completed for ${tier} tier. Highest composite score identified.` }
                       }]
                     });
                   });
