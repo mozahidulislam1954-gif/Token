@@ -15,6 +15,8 @@ const systemInstructions: Record<number, string> = {};
 
 export function setupTelegramBot() {
   const token = process.env.TELEGRAM_BOT_TOKEN;
+  console.log("Telegram Token:", token);
+  console.log("Gemini Key:", process.env.GEMINI_API_KEY);
   
   if (!token) {
     console.warn("TELEGRAM_BOT_TOKEN environment variable not found. Telegram Bot is disabled. Please add it to your environment variables or .env file.");
@@ -22,7 +24,7 @@ export function setupTelegramBot() {
   }
 
   if (process.env.GEMINI_API_KEY) {
-    ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY.trim() });
   }
 
   try {
@@ -73,8 +75,14 @@ export function setupTelegramBot() {
       const chatId = msg.chat.id;
       if (!msg.text || msg.text.startsWith('/')) return;
 
-      if (!ai || process.env.GEMINI_API_KEY === "MY_GEMINI_API_KEY") {
-        bot?.sendMessage(chatId, "Maaf karna, Boss. GEMINI_API_KEY is not configured properly in the Settings/Secrets panel.");
+      let currentAi = ai;
+      if (!currentAi && process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== "MY_GEMINI_API_KEY") {
+        currentAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY.trim() });
+        ai = currentAi; // cache it
+      }
+
+      if (!currentAi || process.env.GEMINI_API_KEY === "MY_GEMINI_API_KEY") {
+        bot?.sendMessage(chatId, "Maaf karna, Boss. GEMINI_API_KEY is missing or invalid. Please check the Secrets panel or .env file.");
         return;
       }
 
@@ -82,8 +90,8 @@ export function setupTelegramBot() {
 
       try {
         if (!userSessions[chatId]) {
-          userSessions[chatId] = ai.chats.create({
-            model: "gemini-3.1-flash-lite-preview",
+          userSessions[chatId] = currentAi.chats.create({
+            model: "gemini-3.1-flash-lite",
             config: {
               systemInstruction: systemInstructions[chatId] || tokenInstruction,
             },
