@@ -1,6 +1,29 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Mic, MicOff, Loader2, Volume2, VolumeX, Keyboard, Send, Trash2, Monitor, MonitorOff, Camera, CameraOff, MessageSquare, X, Brain, UserCircle, Sparkles } from "lucide-react";
-import { getTokenResponse, getTokenAudio, resetTokenSession } from "./services/geminiService";
+import {
+  Mic,
+  MicOff,
+  Loader2,
+  Volume2,
+  VolumeX,
+  Keyboard,
+  Send,
+  Trash2,
+  Monitor,
+  MonitorOff,
+  Camera,
+  CameraOff,
+  MessageSquare,
+  X,
+  Brain,
+  UserCircle,
+  Sparkles,
+  Layers,
+} from "lucide-react";
+import {
+  getTokenResponse,
+  getTokenAudio,
+  resetTokenSession,
+} from "./services/geminiService";
 import { processCommand } from "./services/commandService";
 import { LiveSessionManager, PERSONA_CONFIGS } from "./services/liveService";
 import Visualizer from "./components/Visualizer";
@@ -84,8 +107,6 @@ export default function App() {
     }
   }, [isMuted]);
 
-
-
   const [showChatHistory, setShowChatHistory] = useState(false);
   const [showBrain, setShowBrain] = useState(false);
   const [showPersonas, setShowPersonas] = useState(false);
@@ -103,78 +124,107 @@ export default function App() {
   useEffect(() => {
     const handleBrainUpdate = () => {
       try {
-        setBrainNotes(JSON.parse(localStorage.getItem("openhuman_second_brain") || "[]"));
+        setBrainNotes(
+          JSON.parse(localStorage.getItem("openhuman_second_brain") || "[]"),
+        );
       } catch {}
     };
     const handleScrape = ((e: CustomEvent) => {
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        sender: "system",
-        text: `Scraping: ${e.detail.url}`,
-        timestamp: new Date().toLocaleTimeString()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "system",
+          text: `Scraping: ${e.detail.url}`,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
     }) as EventListener;
-    
+
     const handleMarketData = ((e: CustomEvent) => {
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        sender: "system",
-        text: `Fetching market data for: ${e.detail.ticker}`,
-        timestamp: new Date().toLocaleTimeString()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "system",
+          text: `Fetching market data for: ${e.detail.ticker}`,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
     }) as EventListener;
 
     const handleKronosAnalysis = ((e: CustomEvent) => {
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        sender: "system",
-        text: `Initializing Kronos TSFM analysis for: ${e.detail.ticker} (${e.detail.timeframe})`,
-        timestamp: new Date().toLocaleTimeString()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "system",
+          text: `Initializing Kronos TSFM analysis for: ${e.detail.ticker} (${e.detail.timeframe})`,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
     }) as EventListener;
 
     const handleWikiEvent = ((e: CustomEvent) => {
       let text = "";
-      if (e.detail.type === "ingest") text = `Wiki Maintainer: Ingesting source '${e.detail.title}'`;
-      else if (e.detail.type === "query") text = `Wiki Maintainer: Querying index for '${e.detail.title}'`;
-      else if (e.detail.type === "lint") text = `Wiki Maintainer: Running health-check lint pass...`;
-      
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        sender: "system",
-        text: text,
-        timestamp: new Date().toLocaleTimeString()
-      }]);
+      if (e.detail.type === "ingest")
+        text = `Wiki Maintainer: Ingesting source '${e.detail.title}'`;
+      else if (e.detail.type === "query")
+        text = `Wiki Maintainer: Querying index for '${e.detail.title}'`;
+      else if (e.detail.type === "lint")
+        text = `Wiki Maintainer: Running health-check lint pass...`;
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "system",
+          text: text,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
     }) as EventListener;
 
     const handleAgentSkillEvent = ((e: CustomEvent) => {
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        sender: "system",
-        text: `Staff Engineer: Executing Agent Skill '${e.detail.skill}' on ${e.detail.target}...`,
-        timestamp: new Date().toLocaleTimeString()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "system",
+          text: `Staff Engineer: Executing Agent Skill '${e.detail.skill}' on ${e.detail.target}...`,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
     }) as EventListener;
-    
+
     const handleHermesTaskEvent = ((e: CustomEvent) => {
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        sender: "system",
-        text: `Hermes Agent: Dispatching '${e.detail.type}' background task: ${e.detail.concept}...`,
-        timestamp: new Date().toLocaleTimeString()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "system",
+          text: `Hermes Agent: Dispatching '${e.detail.type}' background task: ${e.detail.concept}...`,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
     }) as EventListener;
-    
+
     const handleGodmodeEvent = ((e: CustomEvent) => {
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        sender: "system",
-        text: `⚡ PLINY G0DM0D3: ${e.detail.action} -> ${e.detail.content}`,
-        timestamp: new Date().toLocaleTimeString()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          sender: "system",
+          text: `⚡ PLINY G0DM0D3: ${e.detail.action} -> ${e.detail.content}`,
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ]);
     }) as EventListener;
-    
-    window.addEventListener("brain_note_added", handleBrainUpdate as EventListener);
+
+    window.addEventListener(
+      "brain_note_added",
+      handleBrainUpdate as EventListener,
+    );
     window.addEventListener("web_scrape_initiated", handleScrape);
     window.addEventListener("market_data_fetched", handleMarketData);
     window.addEventListener("kronos_analysis_started", handleKronosAnalysis);
@@ -183,10 +233,16 @@ export default function App() {
     window.addEventListener("hermes_task_event", handleHermesTaskEvent);
     window.addEventListener("godmode_event", handleGodmodeEvent);
     return () => {
-      window.removeEventListener("brain_note_added", handleBrainUpdate as EventListener);
+      window.removeEventListener(
+        "brain_note_added",
+        handleBrainUpdate as EventListener,
+      );
       window.removeEventListener("web_scrape_initiated", handleScrape);
       window.removeEventListener("market_data_fetched", handleMarketData);
-      window.removeEventListener("kronos_analysis_started", handleKronosAnalysis);
+      window.removeEventListener(
+        "kronos_analysis_started",
+        handleKronosAnalysis,
+      );
       window.removeEventListener("wiki_event", handleWikiEvent);
       window.removeEventListener("agent_skill_event", handleAgentSkillEvent);
       window.removeEventListener("hermes_task_event", handleHermesTaskEvent);
@@ -199,18 +255,18 @@ export default function App() {
     localStorage.setItem("openhuman_persona", key);
     setShowPersonas(false);
     if (isSessionActive && liveSessionRef.current) {
-        liveSessionRef.current.stop();
-        liveSessionRef.current = null;
-        setIsSessionActive(false);
-        setAppState("idle");
-        setTimeout(() => {
-           toggleListening();
-        }, 500);
+      liveSessionRef.current.stop();
+      liveSessionRef.current = null;
+      setIsSessionActive(false);
+      setAppState("idle");
+      setTimeout(() => {
+        toggleListening();
+      }, 500);
     }
   };
 
   const deleteNote = (id: string) => {
-    const newNotes = brainNotes.filter(n => n.id !== id);
+    const newNotes = brainNotes.filter((n) => n.id !== id);
     setBrainNotes(newNotes);
     localStorage.setItem("openhuman_second_brain", JSON.stringify(newNotes));
   };
@@ -236,7 +292,7 @@ export default function App() {
       cameraIntervalRef.current = null;
     }
     if (cameraStreamRef.current) {
-      cameraStreamRef.current.getTracks().forEach(t => t.stop());
+      cameraStreamRef.current.getTracks().forEach((t) => t.stop());
       cameraStreamRef.current = null;
     }
     setCameraStream(null);
@@ -247,10 +303,13 @@ export default function App() {
     if (isCameraSharing) {
       stopCameraShare();
     }
-    if (!navigator.mediaDevices || typeof navigator.mediaDevices.getDisplayMedia !== "function") {
+    if (
+      !navigator.mediaDevices ||
+      typeof navigator.mediaDevices.getDisplayMedia !== "function"
+    ) {
       alert(
         "Boss, the browser is blocking screen sharing inside the preview window because of iframe security rules.\n\n" +
-        "Please open the app in a new tab using the 'Open in new tab' button at the top-right of your screen, then screen sharing will work perfectly!"
+          "Please open the app in a new tab using the 'Open in new tab' button at the top-right of your screen, then screen sharing will work perfectly!",
       );
       return;
     }
@@ -259,11 +318,11 @@ export default function App() {
         video: {
           width: { max: 640 },
           height: { max: 480 },
-          frameRate: { max: 5 }
+          frameRate: { max: 5 },
         },
-        audio: false
+        audio: false,
       });
-      
+
       setScreenStream(stream);
       setIsScreenSharing(true);
       screenStreamRef.current = stream;
@@ -275,14 +334,17 @@ export default function App() {
         };
       }
     } catch (err: any) {
-      if (err?.message?.includes("Permission denied") || err?.name === 'NotAllowedError') {
+      if (
+        err?.message?.includes("Permission denied") ||
+        err?.name === "NotAllowedError"
+      ) {
         // User cancelled or permission denied
         return;
       }
       console.error("Error starting screen share", err);
       alert(
         "Boss, the browser is blocking screen sharing inside the preview window because of iframe security rules.\n\n" +
-        "Please open the app in a new tab using the 'Open in new tab' button at the top-right of your screen, then screen sharing will work perfectly!"
+          "Please open the app in a new tab using the 'Open in new tab' button at the top-right of your screen, then screen sharing will work perfectly!",
       );
     }
   };
@@ -293,7 +355,7 @@ export default function App() {
       screenIntervalRef.current = null;
     }
     if (screenStreamRef.current) {
-      screenStreamRef.current.getTracks().forEach(t => t.stop());
+      screenStreamRef.current.getTracks().forEach((t) => t.stop());
       screenStreamRef.current = null;
     }
     setScreenStream(null);
@@ -304,10 +366,13 @@ export default function App() {
     if (isScreenSharing) {
       stopScreenShare();
     }
-    if (!navigator.mediaDevices || typeof navigator.mediaDevices.getUserMedia !== "function") {
+    if (
+      !navigator.mediaDevices ||
+      typeof navigator.mediaDevices.getUserMedia !== "function"
+    ) {
       alert(
         "Boss, camera access is not supported by your current browser or is blocked because the app is running in an iframe.\n\n" +
-        "Please open the app in a new tab or check your browser/iframe permissions!"
+          "Please open the app in a new tab or check your browser/iframe permissions!",
       );
       return;
     }
@@ -316,11 +381,11 @@ export default function App() {
         video: {
           width: { max: 640 },
           height: { max: 480 },
-          frameRate: { max: 5 }
+          frameRate: { max: 5 },
         },
-        audio: false
+        audio: false,
       });
-      
+
       setCameraStream(stream);
       setIsCameraSharing(true);
       cameraStreamRef.current = stream;
@@ -332,13 +397,16 @@ export default function App() {
         };
       }
     } catch (err: any) {
-      if (err?.message?.includes("Permission denied") || err?.name === 'NotAllowedError') {
+      if (
+        err?.message?.includes("Permission denied") ||
+        err?.name === "NotAllowedError"
+      ) {
         // User cancelled or permission denied
         return;
       }
       console.error("Error starting camera share", err);
       alert(
-        "Boss, please ensure you allow video/camera permissions in your browser. If you are inside the preview iframe, or blocked, please open the app in a new tab."
+        "Boss, please ensure you allow video/camera permissions in your browser. If you are inside the preview iframe, or blocked, please open the app in a new tab.",
       );
     }
   };
@@ -359,14 +427,17 @@ export default function App() {
       const videoElement = document.createElement("video");
       videoElement.srcObject = screenStream;
       videoElement.muted = true;
-      videoElement.play().catch(err => console.error("Video play error in capture", err));
+      videoElement
+        .play()
+        .catch((err) => console.error("Video play error in capture", err));
 
       const sendFrame = () => {
         if (!liveSessionRef.current || !isSessionActive) return;
-        
+
         const canvas = document.createElement("canvas");
         const width = 480;
-        const height = (videoElement.videoHeight / videoElement.videoWidth) * width || 360;
+        const height =
+          (videoElement.videoHeight / videoElement.videoWidth) * width || 360;
         canvas.width = width;
         canvas.height = height;
 
@@ -392,7 +463,10 @@ export default function App() {
       return () => {
         clearInterval(interval);
         screenIntervalRef.current = null;
-        videoElement.removeEventListener("loadedmetadata", handleLoadedMetadata);
+        videoElement.removeEventListener(
+          "loadedmetadata",
+          handleLoadedMetadata,
+        );
       };
     } else {
       if (screenIntervalRef.current) {
@@ -407,14 +481,19 @@ export default function App() {
       const videoElement = document.createElement("video");
       videoElement.srcObject = cameraStream;
       videoElement.muted = true;
-      videoElement.play().catch(err => console.error("Video play error in camera capture", err));
+      videoElement
+        .play()
+        .catch((err) =>
+          console.error("Video play error in camera capture", err),
+        );
 
       const sendFrame = () => {
         if (!liveSessionRef.current || !isSessionActive) return;
-        
+
         const canvas = document.createElement("canvas");
         const width = 480;
-        const height = (videoElement.videoHeight / videoElement.videoWidth) * width || 360;
+        const height =
+          (videoElement.videoHeight / videoElement.videoWidth) * width || 360;
         canvas.width = width;
         canvas.height = height;
 
@@ -440,7 +519,10 @@ export default function App() {
       return () => {
         clearInterval(interval);
         cameraIntervalRef.current = null;
-        videoElement.removeEventListener("loadedmetadata", handleLoadedMetadata);
+        videoElement.removeEventListener(
+          "loadedmetadata",
+          handleLoadedMetadata,
+        );
       };
     } else {
       if (cameraIntervalRef.current) {
@@ -456,72 +538,95 @@ export default function App() {
         clearInterval(screenIntervalRef.current);
       }
       if (screenStreamRef.current) {
-        screenStreamRef.current.getTracks().forEach(t => t.stop());
+        screenStreamRef.current.getTracks().forEach((t) => t.stop());
       }
       if (cameraIntervalRef.current) {
         clearInterval(cameraIntervalRef.current);
       }
       if (cameraStreamRef.current) {
-        cameraStreamRef.current.getTracks().forEach(t => t.stop());
+        cameraStreamRef.current.getTracks().forEach((t) => t.stop());
       }
     };
   }, []);
 
-  const handleTextCommand = useCallback(async (finalTranscript: string) => {
-    if (!finalTranscript.trim()) {
-      setAppState("idle");
-      return;
-    }
-
-    setMessages((prev) => [...prev, { id: Date.now().toString(), sender: "user", text: finalTranscript }]);
-    
-    // If live session is active, send text through it
-    if (isSessionActive && liveSessionRef.current) {
-      liveSessionRef.current.sendText(finalTranscript);
-      return;
-    }
-
-    setAppState("processing");
-
-    // 1. Check for browser commands
-    const commandResult = processCommand(finalTranscript);
-
-    let responseText = "";
-
-    if (commandResult.isBrowserAction) {
-      responseText = commandResult.action;
-      setMessages((prev) => [...prev, { id: Date.now().toString() + "-z", sender: "token", text: responseText }]);
-      
-      if (!isMuted) {
-        setAppState("speaking");
-        const audioBase64 = await getTokenAudio(responseText);
-        if (audioBase64) {
-          await playPCM(audioBase64);
-        }
+  const handleTextCommand = useCallback(
+    async (finalTranscript: string) => {
+      if (!finalTranscript.trim()) {
+        setAppState("idle");
+        return;
       }
 
-      setAppState("idle");
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now().toString(), sender: "user", text: finalTranscript },
+      ]);
 
-      setTimeout(() => {
-        if (commandResult.url) {
-          window.open(commandResult.url, "_blank");
-        }
-      }, 1500);
-    } else {
-      // 2. General Chit-Chat via Gemini
-      responseText = await getTokenResponse(finalTranscript, messagesRef.current);
-      setMessages((prev) => [...prev, { id: Date.now().toString() + "-z", sender: "token", text: responseText }]);
-      
-      if (!isMuted) {
-        setAppState("speaking");
-        const audioBase64 = await getTokenAudio(responseText);
-        if (audioBase64) {
-          await playPCM(audioBase64);
-        }
+      // If live session is active, send text through it
+      if (isSessionActive && liveSessionRef.current) {
+        liveSessionRef.current.sendText(finalTranscript);
+        return;
       }
-      setAppState("idle");
-    }
-  }, [isMuted, isSessionActive]);
+
+      setAppState("processing");
+
+      // 1. Check for browser commands
+      const commandResult = processCommand(finalTranscript);
+
+      let responseText = "";
+
+      if (commandResult.isBrowserAction) {
+        responseText = commandResult.action;
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString() + "-z",
+            sender: "token",
+            text: responseText,
+          },
+        ]);
+
+        if (!isMuted) {
+          setAppState("speaking");
+          const audioBase64 = await getTokenAudio(responseText);
+          if (audioBase64) {
+            await playPCM(audioBase64);
+          }
+        }
+
+        setAppState("idle");
+
+        setTimeout(() => {
+          if (commandResult.url) {
+            window.open(commandResult.url, "_blank");
+          }
+        }, 1500);
+      } else {
+        // 2. General Chit-Chat via Gemini
+        responseText = await getTokenResponse(
+          finalTranscript,
+          messagesRef.current,
+        );
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now().toString() + "-z",
+            sender: "token",
+            text: responseText,
+          },
+        ]);
+
+        if (!isMuted) {
+          setAppState("speaking");
+          const audioBase64 = await getTokenAudio(responseText);
+          if (audioBase64) {
+            await playPCM(audioBase64);
+          }
+        }
+        setAppState("idle");
+      }
+    },
+    [isMuted, isSessionActive],
+  );
 
   useEffect(() => {
     return () => {
@@ -546,19 +651,21 @@ export default function App() {
       try {
         setIsSessionActive(true);
         resetTokenSession();
-        
+
         const session = new LiveSessionManager();
         session.isMuted = isMuted;
         liveSessionRef.current = session;
-        
+
         session.onStateChange = (state) => {
           setAppState(state);
         };
-        
+
         session.onMessage = (sender, text) => {
           setMessages((prev) => {
             if (prev.length === 0) {
-              return [{ id: Date.now().toString() + "-" + sender, sender, text }];
+              return [
+                { id: Date.now().toString() + "-" + sender, sender, text },
+              ];
             }
             const lastMsg = prev[prev.length - 1];
             const isSameSender = lastMsg.sender === sender;
@@ -573,19 +680,23 @@ export default function App() {
               }
               const lastTextEndsWithSpace = lastMsg.text.endsWith(" ");
               const currentTextStartsWithSpace = text.startsWith(" ");
-              const joiner = (lastTextEndsWithSpace || currentTextStartsWithSpace) ? "" : " ";
-              const updatedText = (lastMsg.text + joiner + text).replace(/\s+/g, " ");
+              const joiner =
+                lastTextEndsWithSpace || currentTextStartsWithSpace ? "" : " ";
+              const updatedText = (lastMsg.text + joiner + text).replace(
+                /\s+/g,
+                " ",
+              );
 
-              return [
-                ...prev.slice(0, -1),
-                { ...lastMsg, text: updatedText }
-              ];
+              return [...prev.slice(0, -1), { ...lastMsg, text: updatedText }];
             } else {
-              return [...prev, { id: Date.now().toString() + "-" + sender, sender, text }];
+              return [
+                ...prev,
+                { id: Date.now().toString() + "-" + sender, sender, text },
+              ];
             }
           });
         };
-        
+
         session.onCommand = (url) => {
           setTimeout(() => {
             window.open(url, "_blank");
@@ -594,7 +705,9 @@ export default function App() {
 
         session.onError = (err) => {
           console.error("Live API Session Error:", err);
-          alert("The Live Session API is currently unavailable or experienced an error. Please try again later.");
+          alert(
+            "The Live Session API is currently unavailable or experienced an error. Please try again later.",
+          );
           setIsSessionActive(false);
           setAppState("idle");
         };
@@ -612,7 +725,7 @@ export default function App() {
   const handleTextSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!textInput.trim()) return;
-    
+
     handleTextCommand(textInput);
     setTextInput("");
     setShowTextInput(false);
@@ -621,9 +734,7 @@ export default function App() {
   return (
     <div className="h-[100dvh] w-screen bg-[#050505] text-white flex flex-col items-center justify-between font-sans relative overflow-hidden m-0 p-0">
       {showPermissionModal && (
-        <PermissionModal 
-          onClose={() => setShowPermissionModal(false)} 
-        />
+        <PermissionModal onClose={() => setShowPermissionModal(false)} />
       )}
 
       {/* Cinematic Background Gradients */}
@@ -641,7 +752,9 @@ export default function App() {
             title="Open Conversation & Command History"
           >
             <MessageSquare size={16} className="text-violet-400" />
-            <span className="text-xs font-mono font-bold tracking-wider uppercase hidden md:inline">Logs</span>
+            <span className="text-xs font-mono font-bold tracking-wider uppercase hidden md:inline">
+              Logs
+            </span>
           </button>
 
           <button
@@ -650,7 +763,9 @@ export default function App() {
             title="Open Second Brain Memory"
           >
             <Brain size={16} className="text-pink-400" />
-            <span className="text-xs font-mono font-bold tracking-wider uppercase hidden md:inline">Memory</span>
+            <span className="text-xs font-mono font-bold tracking-wider uppercase hidden md:inline">
+              Memory
+            </span>
           </button>
 
           <button
@@ -658,16 +773,22 @@ export default function App() {
             className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-cyan-500/15 border border-white/10 hover:border-cyan-500/30 text-white/80 hover:text-white transition-all duration-300 shadow-md cursor-pointer pointer-events-auto relative overflow-hidden group"
             title="Change AI Persona"
           >
-            <div className={`absolute inset-0 bg-gradient-to-r ${PERSONA_CONFIGS[activePersona]?.accentColor} opacity-20 group-hover:opacity-40 transition-opacity`}></div>
+            <div
+              className={`absolute inset-0 bg-gradient-to-r ${PERSONA_CONFIGS[activePersona]?.accentColor} opacity-20 group-hover:opacity-40 transition-opacity`}
+            ></div>
             <UserCircle size={16} className="text-cyan-400 relative z-10" />
-            <span className="text-xs font-mono font-bold tracking-wider uppercase hidden md:inline relative z-10">{PERSONA_CONFIGS[activePersona]?.label}</span>
+            <span className="text-xs font-mono font-bold tracking-wider uppercase hidden md:inline relative z-10">
+              {PERSONA_CONFIGS[activePersona]?.label}
+            </span>
           </button>
         </div>
         <div className="flex items-center gap-2">
           {messages.length > 0 && (
             <button
               onClick={() => {
-                if (confirm("Are you sure you want to clear the chat history?")) {
+                if (
+                  confirm("Are you sure you want to clear the chat history?")
+                ) {
                   setMessages([]);
                   resetTokenSession();
                 }
@@ -693,66 +814,57 @@ export default function App() {
       </header>
 
       {/* Main Content - Visualizer & Chat */}
-      <main className="absolute inset-0 flex flex-row items-center justify-between w-full h-full z-10 overflow-hidden pt-20 pb-24 px-4 md:px-12 pointer-events-none">
-        
-        {/* Left Column: Token Status */}
-        <div className="flex w-[30%] lg:w-[25%] h-full flex-col justify-center gap-6 z-10 pl-2 lg:pl-0">
-          {/* Status Indicator */}
-          <div className="h-6">
-            <AnimatePresence>
-              {appState === "processing" && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="flex items-center gap-2 text-cyan-300/80 text-sm md:text-base italic font-serif"
-                >
-                  <Loader2 size={16} className="animate-spin" />
-                  Replying...
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-
+      <main className="absolute inset-0 flex flex-col items-center justify-center w-full h-full z-10 overflow-hidden pointer-events-none">
         {/* Center Visualizer (Fixed Full Screen Background) */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
           <Visualizer state={appState} activePersona={activePersona} />
         </div>
 
-        {/* Right Column: User Status */}
-        <div className="flex w-[30%] lg:w-[25%] h-full flex-col justify-center gap-4 z-10">
-          <div className="h-6 flex justify-end">
-            <AnimatePresence>
+        {/* Status Messages Positioned near the Visualizer */}
+        <div className="absolute top-[30%] md:top-[35%] flex flex-col items-center justify-center z-10">
+          <div className="h-8 flex justify-center items-center">
+            <AnimatePresence mode="wait">
+              {appState === "processing" && (
+                <motion.div
+                  key="processing"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  className="flex items-center gap-2 text-cyan-300 text-sm md:text-lg italic font-serif bg-black/40 px-4 py-1.5 rounded-full border border-cyan-500/30 backdrop-blur-sm"
+                >
+                  <Loader2 size={18} className="animate-spin" />
+                  Replying...
+                </motion.div>
+              )}
               {appState === "listening" && (
                 <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="flex items-center gap-2 text-violet-300/80 text-sm md:text-base italic"
+                  key="listening"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="flex items-center gap-2 text-violet-300 text-sm md:text-lg italic bg-black/40 px-4 py-1.5 rounded-full border border-violet-500/30 backdrop-blur-sm"
                 >
-                  <div className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-violet-400 animate-pulse" />
                   Listening...
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
         </div>
-
       </main>
 
       {/* Controls */}
       <footer className="absolute bottom-0 left-0 w-full flex flex-col items-center justify-center pb-6 md:pb-8 z-20 shrink-0 gap-4">
         <AnimatePresence>
           {showTextInput && (
-            <motion.form 
+            <motion.form
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
               onSubmit={handleTextSubmit}
               className="w-full max-w-md flex items-center gap-2 bg-white/5 border border-white/10 rounded-full p-1 pl-4 backdrop-blur-md shadow-2xl"
             >
-              <input 
+              <input
                 type="text"
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
@@ -760,7 +872,7 @@ export default function App() {
                 className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/30 text-sm"
                 autoFocus
               />
-              <button 
+              <button
                 type="submit"
                 disabled={!textInput.trim()}
                 className="p-2 rounded-full bg-violet-500 hover:bg-violet-600 disabled:opacity-50 disabled:hover:bg-violet-500 transition-colors"
@@ -808,11 +920,7 @@ export default function App() {
             `}
             title={isScreenSharing ? "Stop Screen Sharing" : "Share Screen"}
           >
-            {isScreenSharing ? (
-              <MonitorOff size={20} />
-            ) : (
-              <Monitor size={20} />
-            )}
+            {isScreenSharing ? <MonitorOff size={20} /> : <Monitor size={20} />}
           </button>
 
           <button
@@ -827,13 +935,9 @@ export default function App() {
             `}
             title={isCameraSharing ? "Stop Camera Sharing" : "Share Camera"}
           >
-            {isCameraSharing ? (
-              <CameraOff size={20} />
-            ) : (
-              <Camera size={20} />
-            )}
+            {isCameraSharing ? <CameraOff size={20} /> : <Camera size={20} />}
           </button>
-          
+
           {!isSessionActive && (
             <button
               onClick={() => setShowTextInput(!showTextInput)}
@@ -860,7 +964,7 @@ export default function App() {
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                 <span>BOSS'S SCREEN</span>
               </div>
-              <button 
+              <button
                 onClick={stopScreenShare}
                 className="hover:text-red-400 font-bold transition-colors cursor-pointer"
                 title="Stop Sharing"
@@ -889,7 +993,7 @@ export default function App() {
                 <span className="w-2 h-2 rounded-full bg-violet-500 animate-pulse" />
                 <span>BOSS'S CAMERA</span>
               </div>
-              <button 
+              <button
                 onClick={stopCameraShare}
                 className="hover:text-red-400 font-bold transition-colors cursor-pointer"
                 title="Stop Camera"
@@ -927,11 +1031,18 @@ export default function App() {
                     <UserCircle size={20} className="text-cyan-400" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold tracking-wide">AI Personas</h2>
-                    <p className="text-xs font-mono text-zinc-400">SELECT YOUR COMPANION</p>
+                    <h2 className="text-lg font-bold tracking-wide">
+                      AI Personas
+                    </h2>
+                    <p className="text-xs font-mono text-zinc-400">
+                      SELECT YOUR COMPANION
+                    </p>
                   </div>
                 </div>
-                <button onClick={() => setShowPersonas(false)} className="p-2 rounded-full hover:bg-white/10 text-zinc-400 hover:text-white transition-colors">
+                <button
+                  onClick={() => setShowPersonas(false)}
+                  className="p-2 rounded-full hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
+                >
                   <X size={20} />
                 </button>
               </div>
@@ -943,26 +1054,45 @@ export default function App() {
                       key={key}
                       onClick={() => changePersona(key)}
                       className={`relative flex flex-col text-left p-4 rounded-xl border transition-all duration-300 overflow-hidden cursor-pointer group hover:scale-[1.02] ${
-                        isActive 
-                          ? "border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.1)] bg-white/10" 
+                        isActive
+                          ? "border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.1)] bg-white/10"
                           : "border-white/10 hover:border-white/30 bg-zinc-900/50 hover:bg-zinc-800/80"
                       }`}
                     >
-                      <div className={`absolute inset-0 bg-gradient-to-br ${config.accentColor} opacity-5 group-hover:opacity-10 transition-opacity duration-500`}></div>
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${config.accentColor} opacity-5 group-hover:opacity-10 transition-opacity duration-500`}
+                      ></div>
                       {isActive && (
-                        <div className={`absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br ${config.accentColor} rounded-full blur-[30px] opacity-20`}></div>
+                        <div
+                          className={`absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br ${config.accentColor} rounded-full blur-[30px] opacity-20`}
+                        ></div>
                       )}
-                      
+
                       <div className="relative z-10 flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <Sparkles size={16} className={isActive ? "text-white" : "text-zinc-500 group-hover:text-zinc-300"} />
-                          <h3 className={`text-base font-bold tracking-wide ${isActive ? "text-white" : "text-zinc-300 group-hover:text-white"}`}>{config.label}</h3>
+                          <Sparkles
+                            size={16}
+                            className={
+                              isActive
+                                ? "text-white"
+                                : "text-zinc-500 group-hover:text-zinc-300"
+                            }
+                          />
+                          <h3
+                            className={`text-base font-bold tracking-wide ${isActive ? "text-white" : "text-zinc-300 group-hover:text-white"}`}
+                          >
+                            {config.label}
+                          </h3>
                         </div>
                         {isActive && (
-                          <span className="text-[9px] font-mono font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-white/20 text-white">Active</span>
+                          <span className="text-[9px] font-mono font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-white/20 text-white">
+                            Active
+                          </span>
                         )}
                       </div>
-                      <p className={`relative z-10 text-sm leading-relaxed ${isActive ? "text-zinc-200" : "text-zinc-500 group-hover:text-zinc-400"}`}>
+                      <p
+                        className={`relative z-10 text-sm leading-relaxed ${isActive ? "text-zinc-200" : "text-zinc-500 group-hover:text-zinc-400"}`}
+                      >
                         {config.description}
                       </p>
                       <div className="relative z-10 mt-4 flex items-center gap-1.5 text-[10px] font-mono font-medium text-zinc-500 uppercase tracking-widest">
@@ -1002,8 +1132,12 @@ export default function App() {
                     <Brain size={16} className="text-pink-400" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-mono font-bold tracking-wider text-white uppercase">Second Brain</span>
-                    <span className="text-[10px] font-mono text-zinc-500 font-medium">YOUR AI MEMORY CORE</span>
+                    <span className="text-sm font-mono font-bold tracking-wider text-white uppercase">
+                      Second Brain
+                    </span>
+                    <span className="text-[10px] font-mono text-zinc-500 font-medium">
+                      YOUR AI MEMORY CORE
+                    </span>
                   </div>
                 </div>
                 <button
@@ -1023,9 +1157,12 @@ export default function App() {
                       <Brain size={20} className="animate-pulse" />
                     </div>
                     <div>
-                      <p className="text-sm font-mono text-zinc-300 font-bold uppercase">Memory Empty</p>
+                      <p className="text-sm font-mono text-zinc-300 font-bold uppercase">
+                        Memory Empty
+                      </p>
                       <p className="text-xs text-zinc-500 max-w-xs mt-1 leading-relaxed">
-                        Say "Save a note" or "Remember that..." to the AI to add concepts, ideas, rules, or facts here.
+                        Say "Save a note" or "Remember that..." to the AI to add
+                        concepts, ideas, rules, or facts here.
                       </p>
                     </div>
                   </div>
@@ -1036,8 +1173,10 @@ export default function App() {
                       className="group relative flex flex-col gap-2 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/30 transition-all duration-300"
                     >
                       <div className="flex justify-between items-start gap-2">
-                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">{note.date}</span>
-                        <button 
+                        <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+                          {note.date}
+                        </span>
+                        <button
                           onClick={() => deleteNote(note.id)}
                           className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-red-500/20 text-zinc-500 hover:text-red-400 cursor-pointer"
                           title="Delete Note"
@@ -1045,7 +1184,9 @@ export default function App() {
                           <Trash2 size={12} />
                         </button>
                       </div>
-                      <p className="text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-wrap">{note.content}</p>
+                      <p className="text-sm text-zinc-200 leading-relaxed font-sans whitespace-pre-wrap">
+                        {note.content}
+                      </p>
                     </div>
                   ))
                 )}
@@ -1083,15 +1224,23 @@ export default function App() {
                     <MessageSquare size={16} className="text-violet-400" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-mono font-bold tracking-wider text-white uppercase">Conversation Deck</span>
-                    <span className="text-[10px] font-mono text-zinc-500 font-medium">REAL-TIME INTERACTION STREAM</span>
+                    <span className="text-sm font-mono font-bold tracking-wider text-white uppercase">
+                      Conversation Deck
+                    </span>
+                    <span className="text-[10px] font-mono text-zinc-500 font-medium">
+                      REAL-TIME INTERACTION STREAM
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
                   {messages.length > 0 && (
                     <button
                       onClick={() => {
-                        if (confirm("Are you sure you want to clear the entire chat history?")) {
+                        if (
+                          confirm(
+                            "Are you sure you want to clear the entire chat history?",
+                          )
+                        ) {
                           setMessages([]);
                           resetTokenSession();
                         }
@@ -1120,9 +1269,12 @@ export default function App() {
                       <MessageSquare size={20} />
                     </div>
                     <div>
-                      <p className="text-sm font-mono text-zinc-300 font-bold">DECK EMPTY</p>
+                      <p className="text-sm font-mono text-zinc-300 font-bold">
+                        DECK EMPTY
+                      </p>
                       <p className="text-xs text-zinc-500 max-w-xs mt-1 leading-relaxed">
-                        Start a voice session or write a command to view real-time prompt logs and builds here!
+                        Start a voice session or write a command to view
+                        real-time prompt logs and builds here!
                       </p>
                     </div>
                   </div>
@@ -1130,16 +1282,23 @@ export default function App() {
                   messages.map((msg, index) => {
                     const isUser = msg.sender === "user";
                     const isSystem = msg.sender === "system";
-                    
+
                     if (isSystem) {
                       return (
-                        <div key={msg.id || index} className="w-full flex justify-center my-2">
+                        <div
+                          key={msg.id || index}
+                          className="w-full flex justify-center my-2"
+                        >
                           <div className="bg-black/40 border border-emerald-500/30 px-3 py-1.5 rounded-full flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             <span className="text-[10px] font-mono text-emerald-400 font-bold tracking-widest uppercase">
                               {msg.text}
                             </span>
-                            {msg.timestamp && <span className="text-[9px] text-emerald-500/60 font-mono ml-2">{msg.timestamp}</span>}
+                            {msg.timestamp && (
+                              <span className="text-[9px] text-emerald-500/60 font-mono ml-2">
+                                {msg.timestamp}
+                              </span>
+                            )}
                           </div>
                         </div>
                       );
@@ -1151,10 +1310,14 @@ export default function App() {
                         className={`flex flex-col gap-1.5 ${isUser ? "items-end" : "items-start"}`}
                       >
                         {/* Sender Label */}
-                        <span className={`text-[9px] font-mono font-bold tracking-wider uppercase ${isUser ? "text-violet-400" : "text-cyan-400"}`}>
-                          {isUser ? "◆ BOSS (USER)" : `◇ ${PERSONA_CONFIGS[activePersona]?.label.toUpperCase() || 'AI'}`}
+                        <span
+                          className={`text-[9px] font-mono font-bold tracking-wider uppercase ${isUser ? "text-violet-400" : "text-cyan-400"}`}
+                        >
+                          {isUser
+                            ? "◆ BOSS (USER)"
+                            : `◇ ${PERSONA_CONFIGS[activePersona]?.label.toUpperCase() || "AI"}`}
                         </span>
-                        
+
                         {/* Bubble Style container */}
                         <div
                           className={`max-w-[90%] px-4 py-3 rounded-2xl text-xs leading-relaxed font-sans
@@ -1165,7 +1328,9 @@ export default function App() {
                             }
                           `}
                         >
-                          <div className="whitespace-pre-wrap select-text">{msg.text}</div>
+                          <div className="whitespace-pre-wrap select-text">
+                            {msg.text}
+                          </div>
                         </div>
                       </div>
                     );
@@ -1177,8 +1342,14 @@ export default function App() {
               {/* Console Live session status footing */}
               <div className="px-6 py-4 bg-black/40 border-t border-white/5 flex items-center justify-between text-[10px] font-mono text-zinc-500">
                 <div className="flex items-center gap-1.5">
-                  <span className={`w-1.5 h-1.5 rounded-full ${isSessionActive ? "bg-green-500 animate-pulse" : "bg-yellow-500"}`} />
-                  <span>{isSessionActive ? "SESSION COMPILING STREAM" : "STATE IDLE"}</span>
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${isSessionActive ? "bg-green-500 animate-pulse" : "bg-yellow-500"}`}
+                  />
+                  <span>
+                    {isSessionActive
+                      ? "SESSION COMPILING STREAM"
+                      : "STATE IDLE"}
+                  </span>
                 </div>
                 <span>{messages.length} LOGS REGISTERED</span>
               </div>
