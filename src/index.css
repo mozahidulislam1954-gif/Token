@@ -12,7 +12,8 @@ html, body, #root {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #02080b;
+  background-color: #e0e5ec;
+  color: #2d3748;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -24,4 +25,57 @@ html, body, #root {
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+}
+
+/* Neumorphic Shadows and States */
+.nm-flat {
+  background-color: #e0e5ec !important;
+  box-shadow: 9px 9px 16px rgba(163, 177, 198, 0.6), -9px -9px 16px rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
+}
+
+.nm-sunken {
+  background-color: #e0e5ec !important;
+  box-shadow: inset 8px 8px 16px rgba(167, 181, 202, 0.7), inset -8px -8px 16px rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
+}
+
+.nm-inset-card {
+  background-color: #e0e5ec !important;
+  box-shadow: inset 5px 5px 10px rgba(163, 177, 198, 0.6), inset -5px -5px 10px rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
+}
+
+.nm-btn {
+  background-color: #e0e5ec !important;
+  box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.6), -6px -6px 12px rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+.nm-btn:hover {
+  box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.7), -8px -8px 16px rgba(255, 255, 255, 0.9) !important;
+  transform: translateY(-1px);
+}
+.nm-btn:active, .nm-btn-active {
+  box-shadow: inset 4px 4px 8px rgba(163, 177, 198, 0.7), inset -4px -4px 8px rgba(255, 255, 255, 0.9) !important;
+  transform: translateY(1px);
+}
+
+.nm-btn-sm {
+  background-color: #e0e5ec !important;
+  box-shadow: 4px 4px 8px rgba(163, 177, 198, 0.6), -4px -4px 8px rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
+  transition: all 0.2s ease;
+}
+.nm-btn-sm:hover {
+  box-shadow: 5px 5px 10px rgba(163, 177, 198, 0.7), -5px -5px 10px rgba(255, 255, 255, 0.9) !important;
+}
+.nm-btn-sm:active {
+  box-shadow: inset 3px 3px 6px rgba(163, 177, 198, 0.7), inset -3px -3px 6px rgba(255, 255, 255, 0.9) !important;
+}
+
+.nm-card {
+  background-color: #e0e5ec !important;
+  box-shadow: 10px 10px 20px rgba(163, 177, 198, 0.6), -10px -10px 20px rgba(255, 255, 255, 0.8) !important;
+  border: none !important;
 }

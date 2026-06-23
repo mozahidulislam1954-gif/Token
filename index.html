@@ -4,6 +4,113 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Google AI Studio App</title>
+    <script>
+      globalThis.global = globalThis;
+      
+      // Polyfills for Node.js environment variables and libraries in browser
+      globalThis.process = globalThis.process || {};
+      globalThis.process.env = globalThis.process.env || {};
+      globalThis.process.env.NODE_ENV = globalThis.process.env.NODE_ENV || 'development';
+      globalThis.process.platform = globalThis.process.platform || 'browser';
+      globalThis.process.version = globalThis.process.version || '';
+      globalThis.process.versions = globalThis.process.versions || {};
+      globalThis.process.cwd = globalThis.process.cwd || function() { return '/'; };
+      
+      if (typeof globalThis.Buffer === 'undefined') {
+        globalThis.Buffer = {
+          isBuffer: function() { return false; },
+          from: function(data, encoding) {
+            if (typeof data === 'string') {
+              if (encoding === 'base64') {
+                var bin = atob(data);
+                var arr = new Uint8Array(bin.length);
+                for (var i = 0; i < bin.length; i++) {
+                  arr[i] = bin.charCodeAt(i);
+                }
+                return arr;
+              }
+              return new TextEncoder().encode(data);
+            }
+            return new Uint8Array(data);
+          },
+          concat: function(list) {
+            var totalLength = 0;
+            for (var i = 0; i < list.length; i++) {
+              totalLength += list[i].length;
+            }
+            var result = new Uint8Array(totalLength);
+            var offset = 0;
+            for (var i = 0; i < list.length; i++) {
+              result.set(list[i], offset);
+              offset += list[i].length;
+            }
+            return result;
+          }
+        };
+      }
+
+      // Early capturing error interceptor to prevent external and HMR exceptions from bubbling
+      window.addEventListener("error", function(event) {
+        var message = event.message || "";
+        var msg = String(message).toLowerCase();
+        var source = event.filename || "";
+        if (msg.indexOf("script error") !== -1 || 
+            msg.indexOf("websocket") !== -1 || 
+            msg.indexOf("closed without opened") !== -1 ||
+            (source && source.indexOf("localhost") === -1 && source.indexOf("run.app") === -1)) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return true;
+        }
+      }, true);
+
+      window.onerror = function(message, source, lineno, colno, error) {
+        var msg = String(message).toLowerCase();
+        // Ignore benign, third-party or HMR websocket errors
+        if (msg.indexOf("script error") !== -1 || 
+            msg.indexOf("websocket") !== -1 || 
+            msg.indexOf("closed without opened") !== -1 ||
+            (source && source.indexOf("localhost") === -1 && source.indexOf("run.app") === -1)) {
+          return true; // Silence the error and prevent it from bubbling to console/test runner
+        }
+
+        var errorData = {
+          type: "onerror",
+          message: message,
+          source: source,
+          lineno: lineno,
+          colno: colno,
+          stack: error ? error.stack : null
+        };
+        fetch("/api/error-log", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(errorData)
+        }).catch(function(e) {});
+        return false;
+      };
+
+      window.addEventListener("unhandledrejection", function(event) {
+        var reason = event.reason ? (event.reason.message || String(event.reason)) : "";
+        var msg = reason.toLowerCase();
+        if (msg.indexOf("websocket") !== -1 || msg.indexOf("closed without opened") !== -1) {
+          event.preventDefault(); // Stop default browser handling and console error output
+          event.stopImmediatePropagation();
+          return;
+        }
+
+        var errorData = {
+          type: "unhandledrejection",
+          message: event.reason ? (event.reason.message || String(event.reason)) : "No reason provided",
+          stack: event.reason && event.reason.stack ? event.reason.stack : null
+        };
+        fetch("/api/error-log", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(errorData)
+        }).catch(function(e) {});
+      }, true);
+    </script>
   </head>
   <body>
     <div id="root"></div>

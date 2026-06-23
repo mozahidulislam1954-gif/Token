@@ -30,6 +30,14 @@ export function setupTelegramBot() {
   try {
     bot = new TelegramBot(token, { polling: true });
 
+    bot.on('polling_error', (error) => {
+      console.error("Telegram Bot Polling Error:", error.message || error);
+    });
+
+    bot.on('error', (error) => {
+      console.error("Telegram Bot Error:", error.message || error);
+    });
+
     console.log("Telegram Bot is running!");
 
     bot.onText(/\/start/, (msg) => {

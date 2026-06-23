@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { MicOff } from 'lucide-react';
 
 interface Props {
@@ -8,42 +8,40 @@ interface Props {
 
 export default function PermissionModal({ onClose }: Props) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="w-full max-w-md bg-[#111] border border-white/10 rounded-3xl p-8 shadow-2xl flex flex-col items-center text-center relative overflow-hidden"
+        className="w-full max-w-md bg-[#e0e5ec] nm-card rounded-3xl p-8 flex flex-col items-center text-center relative overflow-hidden"
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 to-orange-500" />
-        
-        <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mb-6">
-          <MicOff size={32} className="text-red-400" />
+        <div className="w-18 h-18 rounded-full nm-inset-card flex items-center justify-center mb-6">
+          <MicOff size={28} className="text-red-500" />
         </div>
         
-        <h2 className="text-2xl font-serif font-medium text-white mb-3">Microphone Blocked</h2>
-        <p className="text-white/60 text-sm mb-6 leading-relaxed">
+        <h2 className="text-2xl font-bold text-slate-800 mb-3">Microphone Blocked</h2>
+        <p className="text-slate-650 text-sm mb-6 leading-relaxed font-medium">
           Your browser has blocked microphone access for this site. Token cannot hear you until you allow it.
         </p>
         
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-left w-full mb-8">
-          <p className="text-sm text-white/80 font-medium mb-2">How to fix this:</p>
-          <ol className="text-xs text-white/60 list-decimal pl-4 space-y-2">
-            <li>Click the <strong>lock icon (🔒)</strong> or <strong>tune icon (⚙️)</strong> next to the URL bar at the top of your browser.</li>
-            <li>Find <strong>Microphone</strong> and change it to <strong>Allow</strong>.</li>
+        <div className="nm-inset-card rounded-2xl p-5 text-left w-full mb-8">
+          <p className="text-sm text-slate-800 font-bold mb-2">How to fix this:</p>
+          <ol className="text-xs text-slate-600 list-decimal pl-4.5 space-y-2.5 font-semibold">
+            <li>Click the <strong className="text-slate-800">lock icon (🔒)</strong> or <strong className="text-slate-800">tune icon (⚙️)</strong> next to the URL bar at the top of your browser.</li>
+            <li>Find <strong className="text-slate-800">Microphone</strong> and change it to <strong className="text-slate-850">Allow</strong>.</li>
             <li>Refresh this page.</li>
           </ol>
         </div>
         
-        <div className="flex flex-col w-full gap-3">
+        <div className="flex flex-col w-full gap-4">
           <button 
             onClick={() => window.location.reload()}
-            className="w-full py-3 px-4 bg-white text-black font-medium rounded-xl hover:bg-gray-200 transition-colors"
+            className="w-full py-3.5 px-4 nm-btn text-teal-600 font-extrabold rounded-2xl hover:scale-[1.01] transition-all cursor-pointer text-sm"
           >
             I've allowed it, Refresh Page
           </button>
           <button 
             onClick={onClose}
-            className="w-full py-3 px-4 bg-white/5 text-white/70 font-medium rounded-xl hover:bg-white/10 transition-colors"
+            className="w-full py-3.5 px-4 nm-btn text-slate-500 font-bold rounded-2xl hover:scale-[1.01] transition-all cursor-pointer text-sm"
           >
             Close
           </button>

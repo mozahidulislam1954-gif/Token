@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { PERSONA_CONFIGS } from "../services/liveService";
 
@@ -47,13 +47,13 @@ export default function Visualizer({ state, activePersona }: VisualizerProps) {
     };
   };
 
-  // Modern tech-focused color palette
+  // Modern tech-focused color palette, adjusted with rich contrast for Neumorphic light-ambient surfaces
   const getTheme = () => {
     switch (state) {
-      case "listening": return { color: "rgba(139, 92, 246, 1)", glow: "shadow-violet-500/60", border: "border-violet-400", fill: "bg-violet-500", text: "text-violet-300" };
-      case "processing": return { color: "rgba(56, 189, 248, 1)", glow: "shadow-sky-400/80", border: "border-sky-400", fill: "bg-sky-400", text: "text-sky-300" };
-      case "speaking": return { color: "rgba(236, 72, 153, 1)", glow: "shadow-pink-500/80", border: "border-pink-400", fill: "bg-pink-500", text: "text-pink-300" };
-      default: return { color: "rgba(6, 182, 212, 0.8)", glow: "shadow-cyan-500/40", border: "border-cyan-500/50", fill: "bg-cyan-500", text: "text-cyan-300" };
+      case "listening": return { color: "rgba(124, 58, 237, 1)", glow: "shadow-violet-400/40", border: "border-violet-300", fill: "bg-violet-600", text: "text-violet-700" };
+      case "processing": return { color: "rgba(2, 132, 199, 1)", glow: "shadow-sky-400/40", border: "border-sky-300", fill: "bg-sky-600", text: "text-sky-700" };
+      case "speaking": return { color: "rgba(219, 39, 119, 1)", glow: "shadow-pink-400/40", border: "border-pink-300", fill: "bg-pink-600", text: "text-pink-700" };
+      default: return { color: "rgba(13, 148, 136, 1)", glow: "shadow-teal-400/30", border: "border-teal-300", fill: "bg-teal-600", text: "text-teal-700" };
     }
   };
 
@@ -65,7 +65,7 @@ export default function Visualizer({ state, activePersona }: VisualizerProps) {
       <motion.div
         animate={getPulseAnimation()}
         className={`absolute w-[60dvw] h-[60dvw] max-w-[600px] max-h-[600px] rounded-full blur-[90px] ${theme.glow}`}
-        style={{ backgroundColor: theme.color, opacity: 0.12 }}
+        style={{ backgroundColor: theme.color, opacity: 0.08 }}
       />
 
       {/* Vortex Portal Swirl Arms */}
@@ -89,14 +89,14 @@ export default function Visualizer({ state, activePersona }: VisualizerProps) {
               >
                 {/* Glowing spiral nodes */}
                 <div 
-                  className={`w-[60px] h-[16px] rounded-full border border-t-[2px] ${theme.border} opacity-30`}
+                  className={`w-[60px] h-[16px] rounded-full border border-t-[2px] ${theme.border} opacity-40`}
                   style={{
                     transform: `translateX(120px) rotate(${35}deg)`,
-                    boxShadow: `0 0 10px ${theme.color}`,
+                    boxShadow: `0 0 10px ${theme.color}33`,
                   }}
                 />
                 <div 
-                  className={`w-[40px] h-[10px] rounded-full border border-b-[2px] ${theme.border} opacity-20`}
+                  className={`w-[40px] h-[10px] rounded-full border border-b-[2px] ${theme.border} opacity-30`}
                   style={{
                     transform: `translateX(160px) rotate(${-25}deg)`,
                   }}
@@ -109,30 +109,39 @@ export default function Visualizer({ state, activePersona }: VisualizerProps) {
         {/* Infinite spinning vortex center layers */}
         <motion.div
           animate={getRingAnimation(3, true)}
-          className={`absolute w-[280px] h-[280px] rounded-full border border-dashed ${theme.border} opacity-25`}
+          className={`absolute w-[280px] h-[280px] rounded-full border border-dashed ${theme.border} opacity-35`}
         />
 
         <motion.div
           animate={getRingAnimation(1, false)}
-          className={`absolute w-[210px] h-[210px] rounded-full border border-dotted ${theme.border} opacity-40`}
+          className={`absolute w-[210px] h-[210px] rounded-full border border-dotted ${theme.border} opacity-50`}
         />
       </div>
 
-      {/* Main Core Circle - display the current state / assistant label */}
+      {/* Main Core Circle - display the current state / assistant label as an extruded neumorphic dial */}
       <motion.div
         animate={getPulseAnimation()}
-        className={`absolute w-[150px] h-[150px] rounded-full border-[1.5px] ${theme.border} bg-black/60 backdrop-blur-md flex flex-col items-center justify-center shadow-[inset_0_0_30px_rgba(0,0,0,0.5)]`}
-        style={{ boxShadow: `0 0 45px ${theme.color}, inset 0 0 35px ${theme.color}` }}
+        className="absolute w-[160px] h-[160px] rounded-full flex flex-col items-center justify-center transition-all duration-300 pointer-events-auto"
+        style={{
+          backgroundColor: '#e0e5ec',
+          boxShadow: state !== "idle"
+            ? `inset 5px 5px 10px rgba(163, 177, 198, 0.8), inset -5px -5px 10px rgba(255, 255, 255, 0.9), 0 0 35px ${theme.color}33`
+            : `8px 8px 16px rgba(163, 177, 198, 0.65), -8px -8px 16px rgba(255, 255, 255, 0.95)`
+        }}
       >
         <div 
-          className="font-bold tracking-[0.3em] text-xl text-white select-none whitespace-nowrap text-center text-ellipsis max-w-full overflow-hidden px-2"
-          style={{ textShadow: `0 0 15px ${theme.color}, 0 0 30px ${theme.color}`, fontSize: 'clamp(10px, 1.2rem, 16px)' }}
+          className="font-bold tracking-[0.25em] text-lg select-none whitespace-nowrap text-center text-ellipsis max-w-full overflow-hidden px-2 transition-colors duration-300"
+          style={{ 
+            color: state === "idle" ? '#4a5568' : '#1a202c',
+            textShadow: state !== "idle" ? `0 0 12px ${theme.color}44` : 'none',
+            fontSize: 'clamp(10px, 1.15rem, 16px)' 
+          }}
         >
           {PERSONA_CONFIGS[activePersona]?.label?.toUpperCase() || 'TOKEN'}
         </div>
         
         {/* Under-center status mini text */}
-        <span className={`text-[8px] tracking-[0.15em] font-mono mt-1 ${theme.text} opacity-80 uppercase`}>
+        <span className={`text-[9px] tracking-[0.15em] font-mono font-bold mt-1.5 uppercase transition-colors duration-300`} style={{ color: theme.color }}>
           {state}
         </span>
       </motion.div>

@@ -81,6 +81,18 @@ export const AI_TOOLS_CATALOG: AITool[] = [
 
   // Development
   {
+    name: "Supermemory",
+    url: "https://github.com/supermemoryai/supermemory?hl=en-IN",
+    description: "Memory and context engine + app that is extremely fast, scalable, and can be run fully locally. The Memory API for the AI era.",
+    category: "Development"
+  },
+  {
+    name: "Observer AI",
+    url: "https://github.com/Roy3838/Observer?hl=en-IN",
+    description: "Build powerful micro-agents that observe, log and react, so you don't have to.",
+    category: "Development"
+  },
+  {
     name: "The Delegation",
     url: "https://github.com/arturitu/the-delegation",
     description: "A no-code 3D playground to explore, design, and interact with Agentic AI systems.",

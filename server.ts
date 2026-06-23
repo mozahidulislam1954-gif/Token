@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config({ override: true });
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { setupTelegramBot } from "./src/telegram.js";
 import { GoogleGenAI, Modality } from "@google/genai";
@@ -27,6 +28,27 @@ async function startServer() {
   // API routes
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
+  });
+
+  app.get("/api/gemini/key", (req, res) => {
+    res.json({ key: process.env.GEMINI_API_KEY || "" });
+  });
+
+  // Client-side error logging endpoint for debugging
+  app.post("/api/error-log", (req, res) => {
+    console.log("=== BROWSER CLIENT ERROR ===");
+    console.log(JSON.stringify(req.body, null, 2));
+    console.log("============================");
+    
+    try {
+      const logPath = path.join(process.cwd(), 'src', 'browser-errors.log');
+      const logMessage = `[${new Date().toISOString()}] ${JSON.stringify(req.body, null, 2)}\n\n`;
+      fs.appendFileSync(logPath, logMessage);
+    } catch (e) {
+      console.error("Failed to write browser error log to file:", e);
+    }
+
+    res.json({ status: "logged" });
   });
 
   // Gemini text helper proxy
