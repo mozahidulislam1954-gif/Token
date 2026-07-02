@@ -123,17 +123,19 @@ export default function Visualizer({ state, activePersona }: VisualizerProps) {
         animate={getPulseAnimation()}
         className="absolute w-[160px] h-[160px] rounded-full flex flex-col items-center justify-center transition-all duration-300 pointer-events-auto"
         style={{
-          backgroundColor: '#e0e5ec',
+          background: "rgba(255, 255, 255, 0.12)",
+          backdropFilter: "blur(16px)",
+          border: "1.5px solid rgba(255, 255, 255, 0.25)",
           boxShadow: state !== "idle"
-            ? `inset 5px 5px 10px rgba(163, 177, 198, 0.8), inset -5px -5px 10px rgba(255, 255, 255, 0.9), 0 0 35px ${theme.color}33`
-            : `8px 8px 16px rgba(163, 177, 198, 0.65), -8px -8px 16px rgba(255, 255, 255, 0.95)`
+            ? `0 0 45px ${theme.color}66, inset 0 2px 4px rgba(255, 255, 255, 0.25), 0 10px 30px rgba(0, 0, 0, 0.3)`
+            : `0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15)`
         }}
       >
         <div 
           className="font-bold tracking-[0.25em] text-lg select-none whitespace-nowrap text-center text-ellipsis max-w-full overflow-hidden px-2 transition-colors duration-300"
           style={{ 
-            color: state === "idle" ? '#4a5568' : '#1a202c',
-            textShadow: state !== "idle" ? `0 0 12px ${theme.color}44` : 'none',
+            color: '#ffffff',
+            textShadow: state !== "idle" ? `0 0 16px ${theme.color}, 0 2px 4px rgba(0,0,0,0.4)` : '0 2px 4px rgba(0,0,0,0.3)',
             fontSize: 'clamp(10px, 1.15rem, 16px)' 
           }}
         >
@@ -141,7 +143,7 @@ export default function Visualizer({ state, activePersona }: VisualizerProps) {
         </div>
         
         {/* Under-center status mini text */}
-        <span className={`text-[9px] tracking-[0.15em] font-mono font-bold mt-1.5 uppercase transition-colors duration-300`} style={{ color: theme.color }}>
+        <span className={`text-[9px] tracking-[0.15em] font-mono font-bold mt-1.5 uppercase transition-colors duration-300`} style={{ color: theme.color, textShadow: `0 0 8px ${theme.color}aa` }}>
           {state}
         </span>
       </motion.div>
